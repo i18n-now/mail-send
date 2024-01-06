@@ -1,5 +1,5 @@
 [package]
-name = "mail-send"
+name = "mail-send-fork"
 description = "E-mail delivery library with SMTP and DKIM support"
 version = "0.4.6"
 edition = "2021"
