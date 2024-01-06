@@ -11,6 +11,7 @@
 use crate::{Credentials, SmtpClient, SmtpClientBuilder};
 use smtp_proto::{EhloResponse, EXT_START_TLS};
 use std::hash::Hash;
+use std::net::IpAddr;
 use std::time::Duration;
 use tokio::net::ToSocketAddrs;
 use tokio::{
@@ -26,8 +27,16 @@ where
     for<'a> (&'a T, u16): ToSocketAddrs,
 {
     pub fn new(hostname: T, port: u16) -> Self {
+        SmtpClientBuilder::_new(hostname, None, port)
+    }
+
+    pub fn new_bind_ip(hostname: T, addr: IpAddr, port: u16) -> Self {
+        SmtpClientBuilder::_new(hostname, Some(addr), port)
+    }
+
+    fn _new(hostname: T, addr: Option<IpAddr>, port: u16) -> Self {
         SmtpClientBuilder {
-            addr: None,
+            addr,
             port,
             timeout: Duration::from_secs(60 * 60),
             tls_connector: build_tls_connector(false),
